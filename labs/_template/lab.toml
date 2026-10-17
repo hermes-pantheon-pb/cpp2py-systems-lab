@@ -1,0 +1,30 @@
+id = "M_TEMPLATE"
+module = 1
+title = "Template Lab: Replace With Title"
+difficulty = 2                 # 1..5
+time_budget_min = 30
+concepts = ["concept-1", "concept-2"]
+false_equivalences = ["FE-1"]
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"
+stress_repeats = 1
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "Basic functional parity with C++ API"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "lifetime"              # correctness | lifetime | ownership | memory | concurrency | latency | safety
+description = "Key systems property that the naive translation violates"
+naive_must_fail = true

@@ -1,0 +1,41 @@
+[project]
+name = "cpp2py-systems-lab"
+version = "0.1.0"
+description = "C/C++ → Python 3.12+ systems curriculum with executable, property-verifying labs."
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+# Stage 1 exemplar labs need only pytest.
+lab = ["pytest>=8"]
+# Full curriculum toolchain (Modules 2–8).
+full = [
+    "pytest>=8",
+    "hypothesis>=6.100",
+    "mypy>=1.11",
+    "ruff>=0.6",
+    "pytest-asyncio>=0.24",
+    "protobuf>=5.27",
+    "grpcio>=1.66",
+    "grpcio-tools>=1.66",
+    "grpcio-health-checking>=1.66",
+]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib -p no:cacheprovider"
+pythonpath = ["."]
+testpaths = ["labs"]
+norecursedirs = [".*", "_template", "__pycache__", ".venv"]
+python_files = ["test_*.py"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+# B006: mutable default args (FE-2) · F632: `is` with literal (FE-6) · B023: loop-variable closures (FE-9)
+select = ["E", "F", "B", "UP", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true

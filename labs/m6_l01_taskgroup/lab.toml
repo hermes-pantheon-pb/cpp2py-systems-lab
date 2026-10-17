@@ -1,0 +1,42 @@
+id = "M6-L01"
+module = 6
+title = "Structured Concurrency with TaskGroup"
+difficulty = 3
+time_budget_min = 45
+concepts = ["event loop", "cooperative scheduling", "asyncio.TaskGroup", "cancellation", "task leak prevention"]
+false_equivalences = []
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"
+stress_repeats = 1
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "fanout_pipeline processes inputs asynchronously and returns ordered results"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "concurrency"
+description = "Executes concurrently on the single-threaded event loop"
+naive_must_fail = false
+
+[[criteria]]
+id = "C3"
+kind = "safety"
+description = "When one task fails, siblings are cancelled and cleaned up with zero orphan task leaks"
+naive_must_fail = true
+
+[[criteria]]
+id = "C4"
+kind = "latency"
+description = "Concurrent async tasks run in parallel (< 120ms for 4x50ms) rather than serializing"
+naive_must_fail = true

@@ -1,0 +1,42 @@
+id = "M4-L01"
+module = 4
+title = "Pluggable Storage Protocol"
+difficulty = 2
+time_budget_min = 35
+concepts = ["vtables vs duck typing", "nominal vs structural subtyping", "typing.Protocol", "runtime_checkable"]
+false_equivalences = []
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"
+stress_repeats = 1
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "StorageService delegates get/put operations to the underlying backend"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "interface"
+description = "StorageBackend is a runtime_checkable Protocol allowing structural subtyping"
+naive_must_fail = true
+
+[[criteria]]
+id = "C3"
+kind = "interface"
+description = "Accepts non-inheriting duck-typed backends without nominal subclassing"
+naive_must_fail = true
+
+[[criteria]]
+id = "C4"
+kind = "safety"
+description = "Incompatible backend lacking required methods is rejected with TypeError"
+naive_must_fail = false

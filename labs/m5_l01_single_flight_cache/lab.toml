@@ -1,0 +1,42 @@
+id = "M5-L01"
+module = 5
+title = "Single-Flight Cache: check-then-act & Thundering Herd"
+difficulty = 3
+time_budget_min = 45
+concepts = ["check-then-act", "data race", "mutex", "future", "single-flight", "GIL switch interval"]
+false_equivalences = ["FE-5"]
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"
+stress_repeats = 3
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "get(key) invokes loader(key) and returns loaded value"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "concurrency"
+description = "Under a 32-thread synchronized stampede on a single key, loader is called EXACTLY once"
+naive_must_fail = true
+
+[[criteria]]
+id = "C3"
+kind = "latency"
+description = "Distinct keys load in parallel (no coarse lock held during slow I/O)"
+naive_must_fail = false
+
+[[criteria]]
+id = "C4"
+kind = "safety"
+description = "Loader exceptions propagate to all concurrent waiters and failed keys are evictable"
+naive_must_fail = true

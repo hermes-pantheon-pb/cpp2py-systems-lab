@@ -1,0 +1,42 @@
+id = "M7-L01"
+module = 7
+title = "Varint & Zigzag Binary Codec"
+difficulty = 2
+time_budget_min = 40
+concepts = ["binary wire formats", "protobuf", "varint", "zigzag", "FE-7 int semantics"]
+false_equivalences = ["FE-7"]
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"
+stress_repeats = 1
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "Round-trip encode and decode for positive integers"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "encoding"
+description = "Compact base-128 wire format: 300 encodes to exactly 2 bytes (0xAC, 0x02)"
+naive_must_fail = false
+
+[[criteria]]
+id = "C3"
+kind = "encoding"
+description = "Zigzag encoding correctly handles negative integers without infinite sign extension"
+naive_must_fail = true
+
+[[criteria]]
+id = "C4"
+kind = "safety"
+description = "Decoder detects truncated buffer with incomplete continuation bit and raises ValueError"
+naive_must_fail = true

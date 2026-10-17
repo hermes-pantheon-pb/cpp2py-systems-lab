@@ -1,0 +1,48 @@
+id = "M1-L01"
+module = 1
+title = "Ownership Cycles: Tree with Parent Links"
+difficulty = 2                 # 1 (warm-up) … 5 (capstone-grade)
+time_budget_min = 40
+concepts = ["reference counting", "cyclic GC", "weakref", "ownership translation"]
+false_equivalences = ["FE-3"]
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"   # must-pass | may-skip | n/a
+stress_repeats = 1
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "add_child / parent / children / path() behave like the C++ API"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "lifetime"
+description = "Dropping the root frees every node with the cyclic GC disabled"
+naive_must_fail = true
+
+[[criteria]]
+id = "C3"
+kind = "ownership"
+description = "add_child() adds zero strong references to the parent"
+naive_must_fail = true
+
+[[criteria]]
+id = "C4"
+kind = "memory"
+description = "Build-and-drop of a 1,000-node tree retains < 16 KiB (GC disabled)"
+naive_must_fail = true
+
+[[criteria]]
+id = "C5"
+kind = "safety"
+description = "A child that outlives its parent reports parent == None (no dangling, no resurrection)"
+naive_must_fail = true

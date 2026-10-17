@@ -1,0 +1,48 @@
+id = "M2-L01"
+module = 2
+title = "Struct Layout: 100k Records Under Budget"
+difficulty = 2
+time_budget_min = 40
+concepts = ["memory layout", "pointer indirection", "__slots__", "dataclass", "buffer protocol"]
+false_equivalences = ["FE-8"]
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"
+stress_repeats = 1
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "Tick holds ts, px, qty; supports equality and hashability"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "layout"
+description = "Instance stores attributes in fixed slots with NO __dict__"
+naive_must_fail = true
+
+[[criteria]]
+id = "C3"
+kind = "memory"
+description = "100k instances retain <= 70.0 bytes/instance under tracemalloc"
+naive_must_fail = true
+
+[[criteria]]
+id = "C4"
+kind = "safety"
+description = "Instance is immutable (reassignment raises FrozenInstanceError or AttributeError)"
+naive_must_fail = true
+
+[[criteria]]
+id = "C5"
+kind = "memory"
+description = "export_columnar() returns contiguous typed array.array buffers ('I', 'd', 'I')"
+naive_must_fail = true

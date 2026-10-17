@@ -1,0 +1,48 @@
+id = "M3-L01"
+module = 3
+title = "Deterministic Connection Release"
+difficulty = 2
+time_budget_min = 35
+concepts = ["RAII translation", "context managers", "__enter__", "__exit__", "finalization"]
+false_equivalences = ["FE-3"]
+
+[triptych]
+cpp = "reference.cpp"
+naive = "naive.py"
+idiomatic = "_reference.py"
+
+[runtime]
+python = ">=3.12"
+requires = []
+free_threading = "must-pass"
+stress_repeats = 1
+
+[[criteria]]
+id = "C1"
+kind = "correctness"
+description = "Connection sends/receives payload and tracks is_closed status"
+naive_must_fail = false
+
+[[criteria]]
+id = "C2"
+kind = "lifetime"
+description = "with-statement closes connection deterministically with cyclic GC disabled"
+naive_must_fail = true
+
+[[criteria]]
+id = "C3"
+kind = "safety"
+description = "Exceptions inside with-block trigger cleanup and propagate without suppression"
+naive_must_fail = true
+
+[[criteria]]
+id = "C4"
+kind = "lifetime"
+description = "Callback reference cycle prevents __del__ cleanup when GC is disabled"
+naive_must_fail = true
+
+[[criteria]]
+id = "C5"
+kind = "safety"
+description = "Operations on a closed connection immediately raise RuntimeError"
+naive_must_fail = false
